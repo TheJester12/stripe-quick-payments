@@ -1,0 +1,9 @@
+*~
+.DS_Store
+.svn
+.cvs
+*.bak
+*.swp
+Thumbs.db
+config.php
+/vendor

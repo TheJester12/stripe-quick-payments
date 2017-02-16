@@ -1,0 +1,6 @@
+{
+    "require": {
+        "wildbit/postmark-php": "^2.3",
+        "stripe/stripe-php": "^4.4"
+    }
+}

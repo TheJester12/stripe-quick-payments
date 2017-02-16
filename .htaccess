@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /payment/
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9_-]+)$ index.php?type=$1
+RewriteRule ^([a-zA-Z0-9_-]+)/$ index.php?type=$1
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9\._-]+)$ index.php?type=$1&param=$2
+RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9\._-]+)/$ index.php?type=$1&param=$2
+
+</IfModule>
