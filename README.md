@@ -1,6 +1,6 @@
 ### Stripe Quick Payments
 
-**Stripe Quick Payments** is a simple set up for giving clients specifically formatted URL's to allow for one time and reoccurring payments through Stripe.
+**Stripe Quick Payments** is a simple web application for giving clients specifically formatted URL's to allow for one time and reoccurring payments through Stripe.
 
 ####Functionality:
 
@@ -24,4 +24,5 @@ https://yoursite.com/payment/amount/54.95
 4. Duplicate config_example.php and rename to config.php
 5. Enter in your Stripe keys into both config.php as well as stripe-payment.js
 6. Change other variables in config.php as you want
-7. Test it out and see how it works!
+7. You may need to edit .htaccess RewriteBase depending on where the application lies in your folder structure
+8. Test it out and see how it works!

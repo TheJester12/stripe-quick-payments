@@ -3,10 +3,9 @@
 	//Still working on this!!
 	
 	require_once dirname( __FILE__ ) . '/config.php';
-	require_once dirname( __FILE__ ) . '/stripe/init.php';
 	require_once('./vendor/autoload.php');
 	use Postmark\PostmarkClient;
-	$postmark_client = new PostmarkClient("server token");
+	$postmark_client = new PostmarkClient($postmark_key);
 	\Stripe\Stripe::setApiKey($stripe_secret);
 	
 	// retrieve the request's body and parse it as JSON

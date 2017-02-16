@@ -48,6 +48,15 @@ $( document ).ready(function() {
 		}
 	});
 	
+	$( "#payment-select" ).change(function( e ) {
+		var plan = $(this).val();
+		var amount = $(this).find(':selected').data('amount');
+		var description = $(this).find(':selected').data('description');
+		$( "#payment-button" ).data('plan',plan);
+		$( "#payment-button" ).data('amount',amount);
+		$( "#payment-button" ).data('description',description);
+	});
+	
 	$( "#payment-button" ).click(function( e ) {
 		// Open Checkout with further options:
 		var type = $( "#payment-button" ).data('type');

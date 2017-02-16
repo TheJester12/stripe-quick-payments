@@ -11,18 +11,16 @@
 	<title>Switchback Interactive - Payment</title>
 	
 	<link rel='stylesheet' href='/payment/css/normalize.min.css' type='text/css' media='all' />
-	<link rel='stylesheet' href='/payment/css/stripe-payment.css' type='text/css' media='all' />
+	<link rel='stylesheet' href='/payment/css/stripe-quick-payments.css' type='text/css' media='all' />
 	
 	<script src="//use.typekit.net/ehu2vxy.js"></script>
 	<script>try{Typekit.load();}catch(e){}</script>
 
 	<script src='/payment/js/jquery-2.1.3.min.js'></script>
 	<script src="https://checkout.stripe.com/checkout.js"></script>
-	<script src='/payment/js/stripe-payment.js'></script>
+	<script src='/payment/js/stripe-quick-payments.js'></script>
 
 </head>
-
-
 
 <body>
 	<script>
@@ -50,11 +48,31 @@
 				<div id="payment-form" data-public-key="<?php echo $stripe_public; ?>" data-base-url="<?php echo $base_url; ?>" data-checkout-name="<?php echo $checkout_name; ?>" data-checkout-image="<?php echo $checkout_image; ?>">
 					<?php if ($type == 'plan') { ?>
 						<?php if ($param == '') { ?>
-							<?php //this functionality is unfinished ?>
-							<p>Would you like to pay Monthly or Yearly?</p>
-							<p><select><option>Monthly</option><option>Yearly</option></select></p>
-							<p>You will be charged $<?php echo $plans[$param]['amount']; ?> a <?php echo $plans[$param]['frequency']; ?> for web maintenance</p>
-							<p><button id="payment-button" class="btn" data-type="plan" data-plan="<?php echo $plans[$param]['name']; ?>" data-amount="<?php echo $plans[$param]['amount']; ?>" data-description="<?php echo $plans[$param]['description']; ?>">Pay Now</button></p>
+							<?php 
+								$plan_details = array();
+								foreach($stripe_public_plans as $plan) {
+									try {
+										$plan_with_details = \Stripe\Plan::retrieve($plan);
+									} catch (Exception $e) {
+										
+									}
+									if ($plan_with_details) {
+										$plan_details[] = $plan_with_details;
+									}
+								}
+							?>
+							<p>Thanks for doing business with Switchback Interactive. You can sign up for an ongoing maintenance plan using this secure payment portal.</p>
+							<p class="small-caps">What plan would you prefer?</p>
+							<p>
+								<div class="styled-select">
+									<select id="payment-select">
+										<?php foreach($plan_details as $plan) { ?>
+											<option value="<?php echo $plan->id; ?>" data-amount="<?php echo $plan->amount/100; ?>" data-description="<?php echo $plan->name; ?>"><?php echo $plan->name; ?> ($<?php echo $plan->amount/100; ?>/<?php echo $plan->interval; ?>)</option>
+										<?php } ?>
+									</select>
+								</div><!-- .styled-select -->
+							</p>
+							<p><button id="payment-button" class="btn" data-type="plan" data-plan="<?php echo $plan_details[0]->id; ?>" data-amount="<?php echo $plan_details[0]->amount/100; ?>" data-description="<?php echo $plan_details[0]->name; ?>">Pay Now</button></p>
 						<?php } else { ?>
 							<?php 
 								try {

@@ -54,3 +54,25 @@ a.btn:hover {
 	font-weight: bold;
 	font-size:14px;
 }
+.styled-select select {
+	font-size:16px;
+	height:32px;
+	padding:5px;
+}
+@media (max-width: 680px) {
+	.content {
+		padding:30px;
+	}
+	.center {
+		width:100%;
+		position: relative;
+		top: 0;
+		left: 0;
+		transform:none;
+		font-size:22px;
+	}
+	.center img {
+		max-width:100%;
+		height:auto;
+	}
+}
