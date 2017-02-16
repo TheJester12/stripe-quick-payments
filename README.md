@@ -6,8 +6,11 @@
 
 Allows for formatted URL's to be created and sent to clients such as these:
 
-#####Reoccurring Plans: 
+#####Specific Reoccurring Plan: 
 https://yoursite.com/payment/plan/{stripe_plan_id}
+
+#####Choice of Reoccurring Plans: 
+https://yoursite.com/payment/plan
 
 #####Update Credit Card:
 https://yoursite.com/payment/update/{stripe_customer_id}
