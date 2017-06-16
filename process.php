@@ -16,12 +16,13 @@ $create_error = false;
 $token_id = $_POST['id'];
 $email = $_POST['email'];
 $type = $_POST['type'];
+$amount = $_POST['amount'];
 
 //Do not process fee's higher than max amount
-if ($type == 'amount' && $param > ($max_amount_accepted * 100)) {
+if ($type == 'amount' && $amount > ($max_amount_accepted * 100)) {
 	$result = array('result'=>'failure','message'=>'Sorry, we do not take credit card payments for more than $' . $max_amount_accepted . ' because of processing fees, please talk to us about issuing a check or some other method of payment.');
 	echo json_encode($result, JSON_PRETTY_PRINT);
-} else if ($type == 'amount' && $param <= 0) {
+} else if ($type == 'amount' && $amount <= 0) {
 	$result = array('result'=>'failure','message'=>'Sorry, that\'s not how this works.');
 	echo json_encode($result, JSON_PRETTY_PRINT);
 }  else {
@@ -44,14 +45,13 @@ if ($type == 'amount' && $param > ($max_amount_accepted * 100)) {
 			}
 		}
 		if ($type == 'amount') {
-			$amount = $_POST['amount'];
 			$customer = \Stripe\Customer::create(array(
 				"source" => $token_id,
 				"description" => $email,
 				"email" => $email,
 			));
 			$charge = \Stripe\Charge::create(array(
-				"amount" => $param,
+				"amount" => $amount,
 				"currency" => "usd",
 				"customer" => $customer->id
 			));
