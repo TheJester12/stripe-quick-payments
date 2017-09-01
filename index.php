@@ -83,7 +83,7 @@
 							?>
 								<?php if ($plan) { ?>
 									<p>Thanks for doing business with Switchback Interactive. You can sign up for an ongoing maintenance plan using this secure payment portal.</p>
-									<p class="small-caps">You will be charged $<?php echo $plan->amount/100; ?> each <?php echo $plan->interval; ?></p>
+									<p class="small-caps">You will be charged $<?php echo $plan->amount/100; ?> every <?php if ($plan->interval_count > 1 ) { echo $plan->interval_count; } ?> <?php echo $plan->interval; ?><?php if ($plan->interval_count > 1 ) { echo "s"; } ?></p>
 									<p><button id="payment-button" class="btn" data-type="plan" data-plan="<?php echo $plan->id; ?>" data-amount="<?php echo $plan->amount/100; ?>" data-description="<?php echo $plan->name; ?>">Pay Now</button></p>
 								<?php } else { ?>
 									<p>Sorry, that isn't one of our maintenance plans.</p>
