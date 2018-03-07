@@ -1,25 +1,29 @@
-### Stripe Quick Payments
+# Stripe Quick Payments
 
 **Stripe Quick Payments** is a simple web application for giving clients specifically formatted URL's to allow for one time and reoccurring payments through Stripe.
 
-####Functionality:
+## Functionality:
 
 Allows for formatted URL's to be created and sent to clients such as these:
 
-#####Specific Reoccurring Plan: 
+### Specific Reoccurring Plan: 
+
 https://yoursite.com/payment/plan/{stripe_plan_id}
 
-#####Choice of Reoccurring Plans: 
+### Choice of Reoccurring Plans: 
+
 https://yoursite.com/payment/plan
 
-#####Update Credit Card:
+### Update Credit Card:
+
 https://yoursite.com/payment/update/{stripe_customer_id}
 
-#####One Time Fee:
+### One Time Fee:
+
 https://yoursite.com/payment/amount/54.95
 
 
-####Installation:
+## Installation:
 
 1. Sign up for a Stripe account
 2. Acquire a server with SSL protection
