@@ -22,13 +22,13 @@
 		try {
 															
 			// successful payment
-			if($event_json->type == 'charge.succeeded') {
+			if (isset($event_json) && $event->type == "invoice.payment_succeeded") {
 				// send a payment receipt email here
 				
 				// retrieve the payer's information
 				$customer = \Stripe\Customer::retrieve($event_json->data->object->customer);
 				
-				$email = $customer->email;
+				$email = 'jesse@switchbackinteractive.com'; //$customer->email;
 				
 				$amount = $event_json->data->object->amount / 100; // amount comes in as amount in cents, so we need to convert to dollars
 				$donor_name = $customer->description;
@@ -37,7 +37,7 @@
 				
 				ob_start();
 
-				include("receipt-email-header.php");
+				include(dirname( __FILE__ ) . "receipt-email-header.php");
 				
 				?>
 				
@@ -49,43 +49,72 @@
 				
 				<?php
 				
-				include("receipt-email-footer.php");
+				include(dirname( __FILE__ ) . "receipt-email-footer.php");
 				
 				$message = ob_get_contents();
 				
 				$subject = "Way to Grow Donation Receipt";
-				$headers[] = 'From: "' . html_entity_decode(get_bloginfo('name')) . '" <' . get_bloginfo('admin_email') . '>';
-				$headers[] = "MIME-Version: 1.0\r\n";
-				$headers[] = 'Content-Type: text/html; charset=UTF-8';
 				
 				ob_end_clean();
 				
 				//$mail_sent = wp_mail($email, $subject, $message, $headers);
 				
 				$sendResult = $postmark_client->sendEmail(
-					"sender@example.com",
-					"receiver@example.com",
-					"Test",
-					"Hello from Postmark!"
+					$postmark_from,
+					$email,
+					$subject,
+					$message
 				);
 				
 			}
 			
 			// failed payment
 
-			if($event->type == 'charge.failed') {
+			if (isset($event_json) && $event->type == "invoice.payment_failed") {
 				// send a failed payment notice email here
 				
+				echo "Got here<br>";
+				
 				// retrieve the payer's information
-				$customer = Stripe_Customer::retrieve($invoice->customer);
-				$email = $customer->email;
+				$customer = \Stripe\Customer::retrieve($event_json->data->object->customer);
+				
+				echo $customer->email . "<br>";
+				
+				$email = 'jesse@switchbackinteractive.com'; //$customer->email;
+				
+				$amount = $event_json->data->object->amount / 100; // amount comes in as amount in cents, so we need to convert to dollars
+				$donor_name = $customer->description;
+				$card_type = $event_json->data->object->source->brand;
+				$card_Last_four = $event_json->data->object->source->last4;
 									
-				$subject = __('Failed Payment', 'pippin_stripe');
-				$headers = 'From: "' . html_entity_decode(get_bloginfo('name')) . '" <' . get_bloginfo('admin_email') . '>';
-				$message = "Hello " . $customer_name . "\n\n";
-				$message .= "We have failed to process your payment of " . $amount . "\n\n";
-				$message .= "Please get in touch with support.\n\n";
-				$message .= "Thank you.";
+				$subject = 'Failed Payment';
+				
+				ob_start();
+
+				include(dirname( __FILE__ ) . "/receipt-email-header.php");
+				
+				?>
+				
+				<span style="font-size:18px; color:#888888">Receipt - <?php echo date("F j, Y"); ?></span><br><br>
+				<span style="font-size:30px; line-height:30px; text-align:center"><?php echo $donor_name; ?></span><br>
+				<span style="font-size:30px; line-height:30px; text-align:center"><?php echo $card_type; ?> - <?php echo $card_Last_four; ?></span><br><br>
+				<span style="font-size:18px; line-height:30px; text-align:center; color:#888888">Donation Total:</span><br>
+				<span style="font-size:30px; line-height:30px; text-align:center"><?php echo '$' . number_format($amount, 2); ?></span>
+				
+				<?php
+				
+				include(dirname( __FILE__ ) . "/receipt-email-footer.php");
+				
+				$message = ob_get_contents();
+				
+				echo $message . "<br>";
+				
+				$sendResult = $postmark_client->sendEmail(
+					$postmark_from,
+					$email,
+					$subject,
+					$message
+				);
 
 				//wp_mail($email, $subject, $message, $headers);
 			}
